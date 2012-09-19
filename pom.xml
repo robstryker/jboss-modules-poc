@@ -1,0 +1,15 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>org.jboss.jdf</groupId>
+  <artifactId>jboss-modules-poc</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+  <name>JBoss Modules PoC</name>
+  <description>Tool that extracts the info from the JBoss AS Modules</description>
+  <dependencies>
+      <dependency>
+          <groupId>org.jboss.logging</groupId>
+          <artifactId>jboss-logging</artifactId>
+          <version>3.1.2.GA</version>
+      </dependency>
+  </dependencies>
+</project>
