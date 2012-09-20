@@ -40,12 +40,15 @@ import org.jboss.jdf.modules.model.AbstractModule;
 import org.jboss.jdf.modules.model.GAV;
 import org.jboss.jdf.modules.model.Module;
 import org.jboss.jdf.modules.model.ModuleAlias;
+import org.jboss.logging.Logger;
 
 /**
  * @author <a href="mailto:benevides@redhat.com">Rafael Benevides</a>
  * 
  */
 public class ModulesUtils {
+
+    private static final Logger log = Logger.getLogger(ModulesUtils.class.getName());
 
     /**
      * This method will find from all available modules the one that satisfies the module alias
@@ -57,6 +60,7 @@ public class ModulesUtils {
     public static Module getModuleFromAlias(ModuleAlias alias, List<AbstractModule> availableModules) {
         for (AbstractModule module : availableModules) {
             if (alias.getTargetName().equals(module.getName()) && alias.getTargetSlot().equals(module.getSlot())) {
+                log.debugf("Module %s found for alias %s", module.getName(), alias.getName());
                 return (Module) module;
             }
         }
@@ -71,7 +75,9 @@ public class ModulesUtils {
      */
     public static boolean isPrivateModule(Module module) {
         String propertyValue = module.getProperties().getProperty("jboss.api");
-        return propertyValue != null && propertyValue.equals("private");
+        boolean isPrivate = propertyValue != null && propertyValue.equals("private");
+        log.debugf("Module %s identified as private? [%s]", module.getName(), isPrivate);
+        return isPrivate;
     }
 
     /**
@@ -101,6 +107,7 @@ public class ModulesUtils {
                 }
             }
         }
+        log.debugf("Found %s package(s) for jar %s", packages, jar);
         return packages;
     }
 
@@ -119,6 +126,7 @@ public class ModulesUtils {
                 packageNames.addAll(getPackagesFromResource(jar));
             }
         }
+        log.debugf("Found %s package(s) for modules %s", packageNames, module);
         return packageNames;
     }
 
@@ -133,7 +141,10 @@ public class ModulesUtils {
             JarEntry jarEntry = (JarEntry) entries.nextElement();
             // look for pom.properties
             if (jarEntry.getName().endsWith("pom.properties")) {
-                return extractGavInformation(jarFile, jarEntry);
+                GAV gav = extractGavInformation(jarFile, jarEntry);
+                log.debugf("This jar %s has GAV information: %s", jar, gav);
+                return gav;
+
             }
         }
         return null;
