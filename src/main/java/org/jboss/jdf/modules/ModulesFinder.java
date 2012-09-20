@@ -23,16 +23,10 @@
 package org.jboss.jdf.modules;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.xml.xpath.XPathExpressionException;
-
-import org.jboss.jdf.modules.model.AbstractModule;
-import org.jboss.jdf.modules.xml.XMLModuleParser;
 import org.jboss.logging.Logger;
-import org.xml.sax.SAXException;
 
 /**
  * @author <a href="mailto:benevides@redhat.com">Rafael Benevides</a>
@@ -44,7 +38,7 @@ public class ModulesFinder {
 
     private List<File> modulesDescriptors = new ArrayList<File>();
 
-    public List<AbstractModule> findModulesInPath(File rootPath) {
+    public List<File> findModulesInPath(File rootPath) {
         if (!rootPath.isDirectory()) {
             throw new IllegalArgumentException(String.format("Path should be a directory: %s", rootPath));
         }
@@ -52,29 +46,10 @@ public class ModulesFinder {
         log.debugf("Scan for modules finished. %s modules found.", modulesDescriptors.size());
 
         try {
-            return createModules();
+            return modulesDescriptors;
         } catch (Exception e) {
-            throw new RuntimeException("Problem creating modules from xml files. Cause: " + e.getCause(), e);
+            throw new RuntimeException("Problem finding modules from xml files. Cause: " + e.getCause(), e);
         }
-    }
-
-    /**
-     * @return
-     * @throws XPathExpressionException
-     * @throws IOException
-     * @throws SAXException
-     * 
-     */
-    private List<AbstractModule> createModules() throws XPathExpressionException, SAXException, IOException {
-        List<AbstractModule> modules = new ArrayList<AbstractModule>();
-        XMLModuleParser xmlParser = new XMLModuleParser();
-        for (File xml : modulesDescriptors) {
-            log.tracef("Parsing xml file %s", xml);
-            AbstractModule module = xmlParser.parse(xml);
-            log.tracef("Module %s idenfied", module);
-            modules.add(module);
-        }
-        return modules;
     }
 
     /**

@@ -26,45 +26,45 @@ package org.jboss.jdf.modules.model;
  * @author <a href="mailto:benevides@redhat.com">Rafael Benevides</a>
  * 
  */
-public class ModuleAlias extends AbstractModule {
+public class GAV {
 
-    private String targetName;
+    private String groupId;
 
-    private String targetSlot = "main";
+    private String artifactId;
+
+    private String version;
 
     /**
-     * The name of the module to which this alias refers.
-     * 
-     * @return the targetName
+     * @param groupId
+     * @param artifactId
+     * @param version
      */
-    public String getTargetName() {
-        return targetName;
+    public GAV(String groupId, String artifactId, String version) {
+        super();
+        this.groupId = groupId;
+        this.artifactId = artifactId;
+        this.version = version;
     }
 
     /**
-     * @param targetName the targetName to set
+     * @return the groupId
      */
-    public void setTargetName(String targetName) {
-        this.targetName = targetName;
+    public String getGroupId() {
+        return groupId;
     }
 
     /**
-     * The version slot of the module to which this alias refers. If not specified, defaults to "main".
-     * 
-     * @return the targetSlot
+     * @return the artifactId
      */
-    public String getTargetSlot() {
-        if (this.targetSlot == null || this.targetSlot.isEmpty()) {
-            return "main";
-        }
-        return targetSlot;
+    public String getArtifactId() {
+        return artifactId;
     }
 
     /**
-     * @param targetSlot the targetSlot to set
+     * @return the version
      */
-    public void setTargetSlot(String targetSlot) {
-        this.targetSlot = targetSlot;
+    public String getVersion() {
+        return version;
     }
 
     /*
@@ -74,8 +74,7 @@ public class ModuleAlias extends AbstractModule {
      */
     @Override
     public String toString() {
-        return String.format("ModuleAlias [name=%s, slot=%s, target-name=%s, target-slot=%s]", getName(),
-                getSlot(), getTargetName(), getTargetSlot());
+        return String.format("GAV [groupId=%s, artifactId=%s, version=%s]", groupId, artifactId, version);
     }
 
 }
