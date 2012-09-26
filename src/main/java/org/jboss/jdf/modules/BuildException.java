@@ -20,33 +20,25 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-package org.jboss.jdf.test;
-
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-
-import org.jboss.jdf.modules.ModulesInformationBuilder;
-import org.jboss.jdf.modules.model.AbstractModule;
-import org.junit.BeforeClass;
+package org.jboss.jdf.modules;
 
 /**
+ * 
+ * Throws in any case of problem during the build of Modules Information
+ * 
  * @author <a href="mailto:benevides@redhat.com">Rafael Benevides</a>
  * 
  */
-public abstract class AbstractModulesTest {
+public class BuildException extends Exception {
 
-    protected static String modulesRoot;
-
-    protected static List<AbstractModule> modules = new ArrayList<AbstractModule>();
+    private static final long serialVersionUID = 1L;
 
     /**
-     * @throws java.lang.Exception
+     * @param message
+     * @param cause
      */
-    @BeforeClass
-    public static void setUpBeforeClass() throws Exception {
-        modulesRoot = "/java/tools/jboss-EAP-6.0.0.GA/jboss-eap-6.0/modules";
-        modules = ModulesInformationBuilder.getInstance(new File(modulesRoot)).build();
+    public BuildException(String message, Throwable cause) {
+        super(message, cause);
     }
 
 }

@@ -25,10 +25,13 @@ package org.jboss.jdf.test;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
+import org.jboss.jdf.modules.io.ModulesFinder;
 import org.jboss.jdf.modules.model.AbstractModule;
 import org.jboss.jdf.modules.xml.XMLModuleParser;
 import org.junit.Assert;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.xml.sax.SAXException;
 
@@ -39,6 +42,16 @@ import org.xml.sax.SAXException;
 public class ParserTest extends AbstractModulesTest {
 
     private XMLModuleParser parser = new XMLModuleParser();
+
+    protected static List<File> xmldescriptors;
+
+    /**
+     * @throws java.lang.Exception
+     */
+    @BeforeClass
+    public static void setUpXMLDescriptors() throws Exception {
+        xmldescriptors = new ModulesFinder().findModulesInPath(new File(modulesRoot));
+    }
 
     /**
      * Test method for {@link org.jboss.jdf.modules.xml.XMLModuleParser#parse(java.io.File)}.

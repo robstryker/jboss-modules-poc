@@ -22,15 +22,13 @@
 
 package org.jboss.jdf.test;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.Set;
 
-import org.jboss.jdf.modules.ModulesUtils;
+import org.jboss.jdf.modules.jar.Gav;
+import org.jboss.jdf.modules.jar.Jar;
 import org.jboss.jdf.modules.model.AbstractModule;
-import org.jboss.jdf.modules.model.GAV;
 import org.jboss.jdf.modules.model.Module;
-import org.jboss.jdf.modules.model.ModuleAlias;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -38,32 +36,16 @@ import org.junit.Test;
  * @author <a href="mailto:benevides@redhat.com">Rafael Benevides</a>
  * 
  */
-public class ModulesUtilsTest extends AbstractModulesTest {
+public class ModulesTest extends AbstractModulesTest {
 
     /**
-     * Test method for
-     * {@link org.jboss.jdf.modules.ModulesUtils#getModuleFromAlias(org.jboss.jdf.modules.model.ModuleAlias, java.util.List)}.
-     */
-    @Test
-    public void testGetModuleFromAlias() {
-        for (AbstractModule am : modules) {
-            if (am instanceof ModuleAlias && am.getName().equals("org.apache.commons.logging")) {
-                ModuleAlias ma = (ModuleAlias) am;
-                Module module = ModulesUtils.getModuleFromAlias(ma, modules);
-                Assert.assertEquals("Should Find module from module-alias", "org.slf4j.jcl-over-slf4j", module.getName());
-
-            }
-        }
-    }
-
-    /**
-     * Test method for {@link org.jboss.jdf.modules.ModulesUtils#isPrivateModule(org.jboss.jdf.modules.model.Module)}.
+     * Test method for {@link org.jboss.jdf.modules.jar.JarUtils#isPrivateModule(org.jboss.jdf.modules.model.Module)}.
      */
     @Test
     public void testIsPrivateModule() {
         for (AbstractModule am : modules) {
             if (am.getName().equals("org.codehaus.jackson.jackson-jaxrs")) {
-                boolean isPrivate = ModulesUtils.isPrivateModule((Module) am);
+                boolean isPrivate = ((Module) am).isPrivateModule();
                 Assert.assertTrue("Module should be private", isPrivate);
 
             }
@@ -71,13 +53,13 @@ public class ModulesUtilsTest extends AbstractModulesTest {
     }
 
     /**
-     * Test method for {@link org.jboss.jdf.modules.ModulesUtils#isPrivateModule(org.jboss.jdf.modules.model.Module)}.
+     * Test method for {@link org.jboss.jdf.modules.jar.JarUtils#isPrivateModule(org.jboss.jdf.modules.model.Module)}.
      */
     @Test
     public void testNotPrivateModule() {
         for (AbstractModule am : modules) {
             if (am.getName().equals("org.picketlink")) {
-                boolean isPrivate = ModulesUtils.isPrivateModule((Module) am);
+                boolean isPrivate = ((Module) am).isPrivateModule();
                 Assert.assertFalse("Module should NOT be private", isPrivate);
 
             }
@@ -85,25 +67,7 @@ public class ModulesUtilsTest extends AbstractModulesTest {
     }
 
     /**
-     * Test method for {@link org.jboss.jdf.modules.ModulesUtils#getPackagesFromResource(java.io.File)}.
-     * 
-     * @throws IOException
-     */
-    @Test
-    public void testGetPackagesFromResource() throws IOException {
-        for (AbstractModule am : modules) {
-            if (am.getName().equals("org.picketlink")) {
-                Module module = (Module) am;
-                File jar = module.getResources().get(0);
-                Set<String> packages = ModulesUtils.getPackagesFromResource(jar);
-                Assert.assertEquals("Picketlink packages for " + jar + " should be 90 packages", 90, packages.size());
-
-            }
-        }
-    }
-
-    /**
-     * Test method for {@link org.jboss.jdf.modules.ModulesUtils#getPackagesFromModule(org.jboss.jdf.modules.model.Module)}.
+     * Test method for {@link org.jboss.jdf.modules.jar.JarUtils#getPackagesFromModule(org.jboss.jdf.modules.model.Module)}.
      * 
      * @throws IOException
      */
@@ -112,7 +76,7 @@ public class ModulesUtilsTest extends AbstractModulesTest {
         for (AbstractModule am : modules) {
             if (am.getName().equals("org.picketlink")) {
                 Module module = (Module) am;
-                Set<String> packages = ModulesUtils.getPackagesFromModule(module);
+                Set<String> packages = module.getPackages();
                 Assert.assertEquals("Picketlink packages for picketlink module should be 100 packages", 100, packages.size());
 
             }
@@ -120,7 +84,7 @@ public class ModulesUtilsTest extends AbstractModulesTest {
     }
 
     /**
-     * Test method for {@link org.jboss.jdf.modules.ModulesUtils#getGavFromJar(java.io.File)}.
+     * Test method for {@link org.jboss.jdf.modules.jar.JarUtils#getGavFromJar(java.io.File)}.
      * 
      * @throws IOException
      */
@@ -129,8 +93,8 @@ public class ModulesUtilsTest extends AbstractModulesTest {
         for (AbstractModule am : modules) {
             if (am.getName().equals("org.picketlink")) {
                 Module module = (Module) am;
-                File jar = module.getResources().get(0);
-                GAV gav = ModulesUtils.getGavFromJar(jar);
+                Jar jar = module.getResources().get(0);
+                Gav gav = jar.getGav();
                 Assert.assertEquals(gav.getGroupId(), "org.picketlink");
                 Assert.assertEquals(gav.getArtifactId(), "picketlink-core");
                 Assert.assertEquals(gav.getVersion(), "2.1.1.Final-redhat-1");
@@ -139,7 +103,7 @@ public class ModulesUtilsTest extends AbstractModulesTest {
     }
 
     /**
-     * Test method for {@link org.jboss.jdf.modules.ModulesUtils#getGavFromJar(java.io.File)}.
+     * Test method for {@link org.jboss.jdf.modules.jar.JarUtils#getGavFromJar(java.io.File)}.
      * 
      * @throws IOException
      */
@@ -148,8 +112,8 @@ public class ModulesUtilsTest extends AbstractModulesTest {
         for (AbstractModule am : modules) {
             if (am.getName().equals("org.dom4j")) {
                 Module module = (Module) am;
-                File jar = module.getResources().get(0);
-                GAV gav = ModulesUtils.getGavFromJar(jar);
+                Jar jar = module.getResources().get(0);
+                Gav gav = jar.getGav();
                 Assert.assertNull("GAV not present. Should be null", gav);
             }
         }

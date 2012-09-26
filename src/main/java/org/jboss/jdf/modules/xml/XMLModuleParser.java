@@ -30,6 +30,7 @@ import java.util.List;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
+import org.jboss.jdf.modules.jar.Jar;
 import org.jboss.jdf.modules.model.AbstractModule;
 import org.jboss.jdf.modules.model.Filter;
 import org.jboss.jdf.modules.model.Module;
@@ -261,7 +262,10 @@ public class XMLModuleParser {
             for (Element resourceRootElement : resourceRootElements) {
                 String resourcePath = resourceRootElement.getAttribute("path");
                 File resourceFile = new File(moduleFolder, resourcePath);
-                module.getResources().add(resourceFile);
+                // Evicts native/resources folders
+                if (resourceFile.isFile()) {
+                    module.getResources().add(new Jar(resourceFile));
+                }
             }
         }
     }

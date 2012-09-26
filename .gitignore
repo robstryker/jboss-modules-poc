@@ -1,7 +1,7 @@
 *.class
 .*
 target
-
+test-output
 # Package Files #
 *.jar
 *.war

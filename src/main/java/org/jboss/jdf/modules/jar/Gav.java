@@ -20,13 +20,13 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-package org.jboss.jdf.modules.model;
+package org.jboss.jdf.modules.jar;
 
 /**
  * @author <a href="mailto:benevides@redhat.com">Rafael Benevides</a>
  * 
  */
-public class GAV {
+public class Gav {
 
     private String groupId;
 
@@ -39,7 +39,7 @@ public class GAV {
      * @param artifactId
      * @param version
      */
-    public GAV(String groupId, String artifactId, String version) {
+    public Gav(String groupId, String artifactId, String version) {
         super();
         this.groupId = groupId;
         this.artifactId = artifactId;

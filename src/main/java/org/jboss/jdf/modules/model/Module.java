@@ -23,9 +23,17 @@
 package org.jboss.jdf.modules.model;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.List;
 import java.util.Properties;
+import java.util.Set;
+import java.util.TreeSet;
+import java.util.jar.JarEntry;
+import java.util.jar.JarFile;
+
+import org.jboss.jdf.modules.jar.Jar;
 
 /**
  * @author <a href="mailto:benevides@redhat.com">Rafael Benevides</a>
@@ -37,7 +45,7 @@ public class Module extends AbstractModule {
 
     private Properties properties = new Properties();
 
-    private List<File> resources = new ArrayList<File>();
+    private List<Jar> resources = new ArrayList<Jar>();
 
     private List<ModuleDependency> moduleDependencies = new ArrayList<ModuleDependency>();
 
@@ -63,7 +71,7 @@ public class Module extends AbstractModule {
      * 
      * @return
      */
-    public List<File> getResources() {
+    public List<Jar> getResources() {
         return resources;
     }
 
@@ -107,6 +115,58 @@ public class Module extends AbstractModule {
     public void setExports(Filter exports) {
         this.exports = exports;
     }
-    
-    
+
+    /**
+     * This method queries the jboss.api property to determine if this is a private module or not
+     * 
+     * @return
+     */
+    public boolean isPrivateModule() {
+        String propertyValue = this.getProperties().getProperty("jboss.api");
+        return propertyValue != null && propertyValue.equals("private");
+    }
+
+    /**
+     * This methos get all package names from a individual jar
+     * 
+     * @param jar
+     * @return
+     * @throws IOException
+     */
+    private Set<String> getPackagesFromResource(File jar) throws IOException {
+        Set<String> packages = new TreeSet<String>();
+        if (jar.isDirectory()) {
+            throw new IOException(String.format("Parameter should be a file: %s", jar));
+        }
+        JarFile jarFile = new JarFile(jar);
+        Enumeration<JarEntry> entries = jarFile.entries();
+        while (entries.hasMoreElements()) {
+            JarEntry jarEntry = (JarEntry) entries.nextElement();
+            // get only package folders that has Classes
+            if (jarEntry.getName().endsWith(".class")) {
+                String className = jarEntry.getName().replaceAll("/", ".").replaceAll(".class", "");
+                // Remove the class Name
+                int i = className.lastIndexOf('.');
+                if (i > 0) {
+                    String packageName = className.substring(0, i);
+                    packages.add(packageName);
+                }
+            }
+        }
+        return packages;
+    }
+
+    /**
+     * This method gets all package names from all resources in this module
+     * 
+     * @return
+     * @throws IOException
+     */
+    public Set<String> getPackages() throws IOException {
+        Set<String> packageNames = new TreeSet<String>();
+        for (Jar jar : this.getResources()) {
+            packageNames.addAll(getPackagesFromResource(jar.getJarFile()));
+        }
+        return packageNames;
+    }
 }

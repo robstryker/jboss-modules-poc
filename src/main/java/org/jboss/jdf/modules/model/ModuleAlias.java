@@ -74,8 +74,8 @@ public class ModuleAlias extends AbstractModule {
      */
     @Override
     public String toString() {
-        return String.format("ModuleAlias [name=%s, slot=%s, target-name=%s, target-slot=%s]", getName(),
-                getSlot(), getTargetName(), getTargetSlot());
+        return String.format("ModuleAlias [name=%s, slot=%s, target-name=%s, target-slot=%s]", getName(), getSlot(),
+                getTargetName(), getTargetSlot());
     }
 
 }
