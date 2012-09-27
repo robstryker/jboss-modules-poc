@@ -28,7 +28,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.jboss.jdf.modules.io.ModulesFinder;
-import org.jboss.jdf.modules.model.AbstractModule;
+import org.jboss.jdf.modules.model.BaseModule;
 import org.jboss.jdf.modules.xml.XMLModuleParser;
 import org.junit.Assert;
 import org.junit.BeforeClass;
@@ -61,9 +61,9 @@ public class ParserTest extends AbstractModulesTest {
      */
     @Test
     public void testParse() throws SAXException, IOException {
-        ArrayList<AbstractModule> modules = new ArrayList<AbstractModule>();
+        ArrayList<BaseModule> modules = new ArrayList<BaseModule>();
         for (File xml : xmldescriptors) {
-            AbstractModule module = parser.parse(xml);
+            BaseModule module = parser.parse(xml);
             modules.add(module);
         }
         Assert.assertEquals("Should be 259 modules found on EAP modules folder", 259, modules.size());

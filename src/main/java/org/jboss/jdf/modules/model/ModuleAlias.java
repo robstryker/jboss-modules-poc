@@ -22,49 +22,27 @@
 
 package org.jboss.jdf.modules.model;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+
 /**
  * @author <a href="mailto:benevides@redhat.com">Rafael Benevides</a>
  * 
  */
-public class ModuleAlias extends AbstractModule {
+@XmlRootElement(name = "module-alias")
+@XmlAccessorType(XmlAccessType.PROPERTY)
+public class ModuleAlias extends BaseModule {
 
-    private String targetName;
-
-    private String targetSlot = "main";
-
-    /**
-     * The name of the module to which this alias refers.
-     * 
-     * @return the targetName
-     */
-    public String getTargetName() {
-        return targetName;
-    }
+    private BaseModule target = new BaseModule();
 
     /**
-     * @param targetName the targetName to set
+     * @return the target
      */
-    public void setTargetName(String targetName) {
-        this.targetName = targetName;
-    }
-
-    /**
-     * The version slot of the module to which this alias refers. If not specified, defaults to "main".
-     * 
-     * @return the targetSlot
-     */
-    public String getTargetSlot() {
-        if (this.targetSlot == null || this.targetSlot.isEmpty()) {
-            return "main";
-        }
-        return targetSlot;
-    }
-
-    /**
-     * @param targetSlot the targetSlot to set
-     */
-    public void setTargetSlot(String targetSlot) {
-        this.targetSlot = targetSlot;
+    @XmlElement
+    public BaseModule getTarget() {
+        return target;
     }
 
     /*
@@ -75,7 +53,7 @@ public class ModuleAlias extends AbstractModule {
     @Override
     public String toString() {
         return String.format("ModuleAlias [name=%s, slot=%s, target-name=%s, target-slot=%s]", getName(), getSlot(),
-                getTargetName(), getTargetSlot());
+                target.getName(), target.getSlot());
     }
 
 }

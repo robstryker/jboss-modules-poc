@@ -24,11 +24,14 @@ package org.jboss.jdf.modules.model;
 
 import java.io.File;
 
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlElement;
+
 /**
  * @author <a href="mailto:benevides@redhat.com">Rafael Benevides</a>
  * 
  */
-public abstract class AbstractModule {
+public class BaseModule {
 
     private String name;
 
@@ -41,6 +44,7 @@ public abstract class AbstractModule {
      * 
      * @return
      */
+    @XmlAttribute
     public String getName() {
         return name;
     }
@@ -52,6 +56,7 @@ public abstract class AbstractModule {
     /**
      * The version slot. If not specified, defaults to "main".
      */
+    @XmlAttribute
     public String getSlot() {
         if (this.slot == null || this.slot.isEmpty()) {
             return "main";
@@ -66,6 +71,7 @@ public abstract class AbstractModule {
     /**
      * @return the sourceXML
      */
+    @XmlElement(name = "source-xml")
     public File getSourceXML() {
         return sourceXML;
     }

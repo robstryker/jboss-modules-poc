@@ -22,10 +22,19 @@
 
 package org.jboss.jdf.modules.model;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
+
 /**
  * @author <a href="mailto:benevides@redhat.com">Rafael Benevides</a>
  * 
  */
+@XmlRootElement(name = "dependency")
+@XmlType(name = "dependency", propOrder = { "name", "slot", "optional", "services", "imports", "exports" })
+@XmlAccessorType(XmlAccessType.PROPERTY)
 public class ModuleDependency {
 
     private String name;
@@ -47,6 +56,7 @@ public class ModuleDependency {
      * 
      * @return
      */
+    @XmlAttribute
     public String getName() {
         return name;
     }
@@ -60,6 +70,7 @@ public class ModuleDependency {
      * 
      * @return
      */
+    @XmlAttribute
     public String getSlot() {
         if (slot == null || slot.isEmpty()) {
             return "main";
@@ -76,6 +87,7 @@ public class ModuleDependency {
      * 
      * @return
      */
+    @XmlAttribute
     public boolean isExport() {
         return export;
     }
@@ -90,6 +102,7 @@ public class ModuleDependency {
      * 
      * @return
      */
+    @XmlAttribute
     public Services getServices() {
         return services;
     }
@@ -103,6 +116,7 @@ public class ModuleDependency {
      * 
      * @return
      */
+    @XmlAttribute
     public boolean isOptional() {
         return optional;
     }

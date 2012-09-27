@@ -31,7 +31,7 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.jboss.jdf.modules.jar.Jar;
-import org.jboss.jdf.modules.model.AbstractModule;
+import org.jboss.jdf.modules.model.BaseModule;
 import org.jboss.jdf.modules.model.Filter;
 import org.jboss.jdf.modules.model.Module;
 import org.jboss.jdf.modules.model.ModuleAlias;
@@ -71,7 +71,7 @@ public class XMLModuleParser {
      * @throws SAXException
      * @throws IOException
      */
-    public AbstractModule parse(File xml) throws SAXException, IOException {
+    public BaseModule parse(File xml) throws SAXException, IOException {
         Document document = documentBuilder.parse(xml);
         log.tracef("XML %s parsed. Populating info", xml);
         if (document.getDocumentElement().getNodeName().equals("module")) {
@@ -90,7 +90,7 @@ public class XMLModuleParser {
      * @param abstractModule
      * @param document
      */
-    private void fillBasicModuleInformation(File sourceXML, AbstractModule abstractModule, Document document) {
+    private void fillBasicModuleInformation(File sourceXML, BaseModule abstractModule, Document document) {
         abstractModule.setSourceXML(sourceXML);
         abstractModule.setName(document.getDocumentElement().getAttribute("name"));
         abstractModule.setSlot(document.getDocumentElement().getAttribute("slot"));
@@ -106,8 +106,8 @@ public class XMLModuleParser {
     private ModuleAlias createModuleAlias(File sourceXML, Document document) {
         ModuleAlias moduleAlias = new ModuleAlias();
         fillBasicModuleInformation(sourceXML, moduleAlias, document);
-        moduleAlias.setTargetName(document.getDocumentElement().getAttribute("target-name"));
-        moduleAlias.setTargetSlot(document.getDocumentElement().getAttribute("target-slot"));
+        moduleAlias.getTarget().setName(document.getDocumentElement().getAttribute("target-name"));
+        moduleAlias.getTarget().setSlot(document.getDocumentElement().getAttribute("target-slot"));
         log.tracef("%s populated", moduleAlias);
         return moduleAlias;
     }

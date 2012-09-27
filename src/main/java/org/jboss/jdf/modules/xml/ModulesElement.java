@@ -20,33 +20,33 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-package org.jboss.jdf.test;
+package org.jboss.jdf.modules.xml;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.jboss.jdf.modules.ModulesInformationBuilder;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlAnyElement;
+import javax.xml.bind.annotation.XmlRootElement;
+
 import org.jboss.jdf.modules.model.BaseModule;
-import org.junit.BeforeClass;
 
 /**
  * @author <a href="mailto:benevides@redhat.com">Rafael Benevides</a>
  * 
  */
-public abstract class AbstractModulesTest {
+@XmlRootElement(name = "modules")
+@XmlAccessorType(XmlAccessType.PROPERTY)
+public class ModulesElement {
 
-    protected static String modulesRoot;
-
-    protected static List<BaseModule> modules = new ArrayList<BaseModule>();
+    private List<BaseModule> modules = new ArrayList<BaseModule>();
 
     /**
-     * @throws java.lang.Exception
+     * @return the module
      */
-    @BeforeClass
-    public static void setUpBeforeClass() throws Exception {
-        modulesRoot = "/java/tools/jboss-EAP-6.0.0.GA/jboss-eap-6.0/modules";
-        modules = ModulesInformationBuilder.getInstance(new File(modulesRoot)).build();
+    @XmlAnyElement
+    public List<BaseModule> getModules() {
+        return modules;
     }
-
 }

@@ -27,7 +27,7 @@ import java.util.Set;
 
 import org.jboss.jdf.modules.jar.Gav;
 import org.jboss.jdf.modules.jar.Jar;
-import org.jboss.jdf.modules.model.AbstractModule;
+import org.jboss.jdf.modules.model.BaseModule;
 import org.jboss.jdf.modules.model.Module;
 import org.junit.Assert;
 import org.junit.Test;
@@ -43,7 +43,7 @@ public class ModulesTest extends AbstractModulesTest {
      */
     @Test
     public void testIsPrivateModule() {
-        for (AbstractModule am : modules) {
+        for (BaseModule am : modules) {
             if (am.getName().equals("org.codehaus.jackson.jackson-jaxrs")) {
                 boolean isPrivate = ((Module) am).isPrivateModule();
                 Assert.assertTrue("Module should be private", isPrivate);
@@ -57,7 +57,7 @@ public class ModulesTest extends AbstractModulesTest {
      */
     @Test
     public void testNotPrivateModule() {
-        for (AbstractModule am : modules) {
+        for (BaseModule am : modules) {
             if (am.getName().equals("org.picketlink")) {
                 boolean isPrivate = ((Module) am).isPrivateModule();
                 Assert.assertFalse("Module should NOT be private", isPrivate);
@@ -73,7 +73,7 @@ public class ModulesTest extends AbstractModulesTest {
      */
     @Test
     public void testGetPackagesFromModule() throws IOException {
-        for (AbstractModule am : modules) {
+        for (BaseModule am : modules) {
             if (am.getName().equals("org.picketlink")) {
                 Module module = (Module) am;
                 Set<String> packages = module.getPackages();
@@ -90,7 +90,7 @@ public class ModulesTest extends AbstractModulesTest {
      */
     @Test
     public void testGetGavFromJar() throws IOException {
-        for (AbstractModule am : modules) {
+        for (BaseModule am : modules) {
             if (am.getName().equals("org.picketlink")) {
                 Module module = (Module) am;
                 Jar jar = module.getResources().get(0);
@@ -109,7 +109,7 @@ public class ModulesTest extends AbstractModulesTest {
      */
     @Test
     public void testGetGavFromNoGavJar() throws IOException {
-        for (AbstractModule am : modules) {
+        for (BaseModule am : modules) {
             if (am.getName().equals("org.dom4j")) {
                 Module module = (Module) am;
                 Jar jar = module.getResources().get(0);

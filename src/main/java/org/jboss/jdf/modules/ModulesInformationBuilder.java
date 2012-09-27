@@ -23,13 +23,20 @@
 package org.jboss.jdf.modules;
 
 import java.io.File;
+import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.Marshaller;
+
 import org.jboss.jdf.modules.io.ModulesFinder;
-import org.jboss.jdf.modules.model.AbstractModule;
+import org.jboss.jdf.modules.model.BaseModule;
+import org.jboss.jdf.modules.model.Module;
+import org.jboss.jdf.modules.model.ModuleAlias;
+import org.jboss.jdf.modules.xml.ModulesElement;
 import org.jboss.jdf.modules.xml.XMLModuleParser;
 
 /**
@@ -58,16 +65,33 @@ public class ModulesInformationBuilder {
         return instances.get(path);
     }
 
-    public List<AbstractModule> build() throws BuildException {
-        List<AbstractModule> modules = new ArrayList<AbstractModule>();
+    public List<BaseModule> build() throws BuildException {
+        List<BaseModule> modules = new ArrayList<BaseModule>();
         try {
             XMLModuleParser parser = new XMLModuleParser();
             for (File descriptor : modulesDescriptors) {
                 modules.add(parser.parse(descriptor));
             }
         } catch (Exception e) {
-            throw new BuildException("Can build Modules Information", e);
+            throw new BuildException("Can't build Modules Information", e);
         }
         return modules;
+    }
+
+    public String buildXML() throws BuildException {
+        try {
+            JAXBContext context = JAXBContext.newInstance(ModulesElement.class, Module.class, ModuleAlias.class);
+            Marshaller marshaller = context.createMarshaller();
+            StringWriter sw = new StringWriter();
+            ModulesElement me = new ModulesElement();
+
+            me.getModules().addAll(build());
+            marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+            marshaller.marshal(me, sw);
+
+            return sw.toString();
+        } catch (Exception e) {
+            throw new BuildException("Can't build Modules Information", e);
+        }
     }
 }

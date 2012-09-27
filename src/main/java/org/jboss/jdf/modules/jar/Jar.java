@@ -33,6 +33,9 @@ import java.util.Properties;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlElement;
+
 /**
  * @author <a href="mailto:benevides@redhat.com">Rafael Benevides</a>
  * 
@@ -40,6 +43,10 @@ import java.util.jar.JarFile;
 public class Jar {
 
     private File jarFile;
+
+    Jar() {
+        //Default constructor to JAXB
+    }
 
     /**
      * @param jarFile
@@ -54,6 +61,7 @@ public class Jar {
     /**
      * @return the jarFile
      */
+    @XmlAttribute(name = "file")
     public File getJarFile() {
         return jarFile;
     }
@@ -65,6 +73,7 @@ public class Jar {
      * 
      * @throws IOException
      */
+    @XmlElement(name = "gav")
     public Gav getGav() throws IOException {
         JarFile jarFile = new JarFile(this.getJarFile());
         Enumeration<JarEntry> entries = jarFile.entries();

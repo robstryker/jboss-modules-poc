@@ -33,13 +33,26 @@ import java.util.TreeSet;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementWrapper;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+
 import org.jboss.jdf.modules.jar.Jar;
+import org.jboss.jdf.modules.xml.PropertiesAdapter;
 
 /**
  * @author <a href="mailto:benevides@redhat.com">Rafael Benevides</a>
  * 
  */
-public class Module extends AbstractModule {
+@XmlRootElement(name = "module")
+@XmlType(name = "module", propOrder = { "privateModule", "mainClass", "properties", "resources", "packages", "exports" })
+@XmlAccessorType(XmlAccessType.PROPERTY)
+public class Module extends BaseModule {
 
     private String mainClass;
 
@@ -58,6 +71,7 @@ public class Module extends AbstractModule {
      * 
      * @return
      */
+    @XmlElement(name = "main-class")
     public String getMainClass() {
         return mainClass;
     }
@@ -71,6 +85,8 @@ public class Module extends AbstractModule {
      * 
      * @return
      */
+    @XmlElementWrapper(name = "resources")
+    @XmlElement(name = "jar")
     public List<Jar> getResources() {
         return resources;
     }
@@ -81,6 +97,7 @@ public class Module extends AbstractModule {
      * 
      * @return
      */
+    @XmlJavaTypeAdapter(PropertiesAdapter.class)
     public Properties getProperties() {
         return properties;
     }
@@ -121,6 +138,7 @@ public class Module extends AbstractModule {
      * 
      * @return
      */
+    @XmlAttribute(name = "private")
     public boolean isPrivateModule() {
         String propertyValue = this.getProperties().getProperty("jboss.api");
         return propertyValue != null && propertyValue.equals("private");
@@ -162,6 +180,8 @@ public class Module extends AbstractModule {
      * @return
      * @throws IOException
      */
+    @XmlElementWrapper(name = "packages")
+    @XmlElement(name = "package")
     public Set<String> getPackages() throws IOException {
         Set<String> packageNames = new TreeSet<String>();
         for (Jar jar : this.getResources()) {

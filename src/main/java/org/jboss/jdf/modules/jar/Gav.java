@@ -22,17 +22,29 @@
 
 package org.jboss.jdf.modules.jar;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlAttribute;
+
 /**
  * @author <a href="mailto:benevides@redhat.com">Rafael Benevides</a>
  * 
  */
+@XmlAccessorType(XmlAccessType.FIELD)
 public class Gav {
 
+    @XmlAttribute
     private String groupId;
 
+    @XmlAttribute
     private String artifactId;
 
+    @XmlAttribute
     private String version;
+
+    Gav() {
+        // Default constructor to JAXB
+    }
 
     /**
      * @param groupId
