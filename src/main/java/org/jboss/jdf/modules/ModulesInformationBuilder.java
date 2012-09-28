@@ -47,12 +47,15 @@ public class ModulesInformationBuilder {
 
     private List<File> modulesDescriptors;
 
+    private File rootPath;
+
     private static Map<File, ModulesInformationBuilder> instances = new HashMap<File, ModulesInformationBuilder>();
 
     private ModulesInformationBuilder(File path) {
         if (!path.isDirectory()) {
             throw new IllegalArgumentException(String.format("Path %s should point to a directory!", path));
         }
+        this.rootPath = path;
         ModulesFinder finder = new ModulesFinder();
         modulesDescriptors = finder.findModulesInPath(path);
     }
@@ -68,7 +71,7 @@ public class ModulesInformationBuilder {
     public List<BaseModule> build() throws BuildException {
         List<BaseModule> modules = new ArrayList<BaseModule>();
         try {
-            XMLModuleParser parser = new XMLModuleParser();
+            XMLModuleParser parser = new XMLModuleParser(rootPath);
             for (File descriptor : modulesDescriptors) {
                 modules.add(parser.parse(descriptor));
             }

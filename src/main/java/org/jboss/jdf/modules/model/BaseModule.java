@@ -24,13 +24,17 @@ package org.jboss.jdf.modules.model;
 
 import java.io.File;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  * @author <a href="mailto:benevides@redhat.com">Rafael Benevides</a>
  * 
  */
+@XmlAccessorType(XmlAccessType.PROPERTY)
 public class BaseModule {
 
     private String name;
@@ -38,6 +42,33 @@ public class BaseModule {
     private String slot = "main";
 
     private File sourceXML;
+
+    private File rootPath;
+
+    BaseModule() {
+        // default constructor for JAXB
+    }
+
+    public BaseModule(File rootPath, String name, String slot, File sourceXML) {
+        if (rootPath.isFile()) {
+            throw new IllegalArgumentException(String.format("Root Path should be a directory: %s", rootPath));
+        }
+        this.rootPath = rootPath;
+        this.name = name;
+        this.slot = slot;
+        this.sourceXML = sourceXML;
+    }
+
+    @XmlElement(name = "source-xml")
+    public String getRelativePath() {
+        // target modules from module-alias doesn't have sourceXML
+        if (sourceXML != null) {
+            String fullPath = sourceXML.getAbsolutePath();
+            String relativePath = fullPath.substring(rootPath.getAbsolutePath().length() + 1, fullPath.length());
+            return relativePath;
+        }
+        return null;
+    }
 
     /**
      * The name of the module. This name must match the name of the module being loaded
@@ -47,10 +78,6 @@ public class BaseModule {
     @XmlAttribute
     public String getName() {
         return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     /**
@@ -64,23 +91,12 @@ public class BaseModule {
         return slot;
     }
 
-    public void setSlot(String slot) {
-        this.slot = slot;
-    }
-
     /**
      * @return the sourceXML
      */
-    @XmlElement(name = "source-xml")
+    @XmlTransient
     public File getSourceXML() {
         return sourceXML;
-    }
-
-    /**
-     * @param sourceXML the sourceXML to set
-     */
-    public void setSourceXML(File sourceXML) {
-        this.sourceXML = sourceXML;
     }
 
     /*

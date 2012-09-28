@@ -54,8 +54,11 @@ public class XMLModuleParser {
 
     private DocumentBuilder documentBuilder;
 
-    public XMLModuleParser() {
+    private File rootPath;
+
+    public XMLModuleParser(File rootPath) {
         try {
+            this.rootPath = rootPath;
             DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
             documentBuilder = documentBuilderFactory.newDocumentBuilder();
         } catch (Exception e) {
@@ -84,19 +87,6 @@ public class XMLModuleParser {
     }
 
     /**
-     * ModuleAlias and Module have the same information (name, slot, sourceXML) that is filled here
-     * 
-     * @param sourceXML
-     * @param abstractModule
-     * @param document
-     */
-    private void fillBasicModuleInformation(File sourceXML, BaseModule abstractModule, Document document) {
-        abstractModule.setSourceXML(sourceXML);
-        abstractModule.setName(document.getDocumentElement().getAttribute("name"));
-        abstractModule.setSlot(document.getDocumentElement().getAttribute("slot"));
-    }
-
-    /**
      * Create ModuleAlias
      * 
      * @param xml
@@ -104,10 +94,12 @@ public class XMLModuleParser {
      * @return
      */
     private ModuleAlias createModuleAlias(File sourceXML, Document document) {
-        ModuleAlias moduleAlias = new ModuleAlias();
-        fillBasicModuleInformation(sourceXML, moduleAlias, document);
-        moduleAlias.getTarget().setName(document.getDocumentElement().getAttribute("target-name"));
-        moduleAlias.getTarget().setSlot(document.getDocumentElement().getAttribute("target-slot"));
+        String name = document.getDocumentElement().getAttribute("name");
+        String slot = document.getDocumentElement().getAttribute("slot");
+        String targetName = document.getDocumentElement().getAttribute("target-name");
+        String targetSlot = document.getDocumentElement().getAttribute("target-slot");
+        BaseModule target = new BaseModule(rootPath, targetName, targetSlot, null);
+        ModuleAlias moduleAlias = new ModuleAlias(rootPath, name, slot, sourceXML, target);
         log.tracef("%s populated", moduleAlias);
         return moduleAlias;
     }
@@ -120,9 +112,10 @@ public class XMLModuleParser {
      * @return
      */
     private Module createModule(File sourceXML, Document document) {
-        Module module = new Module();
+        String name = document.getDocumentElement().getAttribute("name");
+        String slot = document.getDocumentElement().getAttribute("slot");
 
-        fillBasicModuleInformation(sourceXML, module, document);
+        Module module = new Module(rootPath, name, slot, sourceXML);
 
         module.setMainClass(getModuleMainClass(document));
         module.setExports(getFilter(document.getDocumentElement(), "exports"));
@@ -264,7 +257,7 @@ public class XMLModuleParser {
                 File resourceFile = new File(moduleFolder, resourcePath);
                 // Evicts native/resources folders
                 if (resourceFile.isFile()) {
-                    module.getResources().add(new Jar(resourceFile));
+                    module.getResources().add(new Jar(rootPath, resourceFile));
                 }
             }
         }

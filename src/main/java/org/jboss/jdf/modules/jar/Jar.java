@@ -43,27 +43,39 @@ import javax.xml.bind.annotation.XmlElement;
 public class Jar {
 
     private File jarFile;
+    private File rootPath;
 
     Jar() {
-        //Default constructor to JAXB
+        // Default constructor to JAXB
     }
 
     /**
      * @param jarFile
      */
-    public Jar(File jarFile) {
+    public Jar(File rootPath, File jarFile) {
+        if (rootPath.isFile()) {
+            throw new IllegalArgumentException(String.format("Root Path should be a directory: %s", rootPath));
+        }
         if (jarFile.isDirectory()) {
             throw new IllegalArgumentException(String.format("Jar should be a file: %s", jarFile));
         }
+        this.rootPath = rootPath;
         this.jarFile = jarFile;
     }
 
     /**
      * @return the jarFile
      */
-    @XmlAttribute(name = "file")
+
     public File getJarFile() {
         return jarFile;
+    }
+
+    @XmlAttribute(name = "file")
+    public String getRelativePath() {
+        String fullPath = jarFile.getAbsolutePath();
+        String relativePath = fullPath.substring(rootPath.getAbsolutePath().length() + 1, fullPath.length());
+        return relativePath;
     }
 
     /**

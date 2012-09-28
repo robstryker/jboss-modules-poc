@@ -22,6 +22,8 @@
 
 package org.jboss.jdf.modules.model;
 
+import java.io.File;
+
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
@@ -35,7 +37,19 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlAccessorType(XmlAccessType.PROPERTY)
 public class ModuleAlias extends BaseModule {
 
-    private BaseModule target = new BaseModule();
+    private BaseModule target;
+
+    ModuleAlias() {
+        // default constructor for JAXB
+    }
+
+    /**
+     * @param rootPath
+     */
+    public ModuleAlias(File rootPath, String name, String slot, File sourceXML, BaseModule target) {
+        super(rootPath, name, slot, sourceXML);
+        this.target = target;
+    }
 
     /**
      * @return the target

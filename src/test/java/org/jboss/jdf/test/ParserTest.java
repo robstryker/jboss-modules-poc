@@ -41,7 +41,7 @@ import org.xml.sax.SAXException;
  */
 public class ParserTest extends AbstractModulesTest {
 
-    private XMLModuleParser parser = new XMLModuleParser();
+    private XMLModuleParser parser = new XMLModuleParser(new File(modulesRoot));
 
     protected static List<File> xmldescriptors;
 

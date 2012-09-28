@@ -66,6 +66,17 @@ public class Module extends BaseModule {
 
     private Filter exports;
 
+    Module() {
+        // default constructor for JAXB
+    }
+
+    /**
+     * @param rootPath
+     */
+    public Module(File rootPath, String name, String slot, File sourceXML) {
+        super(rootPath, name, slot, sourceXML);
+    }
+
     /**
      * The main class of this module, if any.
      * 
