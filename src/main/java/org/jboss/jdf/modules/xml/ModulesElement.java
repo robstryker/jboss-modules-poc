@@ -22,12 +22,14 @@
 
 package org.jboss.jdf.modules.xml;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAnyElement;
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import org.jboss.jdf.modules.model.BaseModule;
@@ -41,6 +43,31 @@ import org.jboss.jdf.modules.model.BaseModule;
 public class ModulesElement {
 
     private List<BaseModule> modules = new ArrayList<BaseModule>();
+    
+    private File rooPath;
+    
+    ModulesElement() {
+        // Default Constructor to JAXB
+    }
+    
+    
+    /**
+     * @param rooPath
+     */
+    public ModulesElement(File rooPath) {
+        this.rooPath = rooPath;
+    }
+    
+    
+    /**
+     * @return the rooPath
+     */
+    @XmlElement(name="root-path")
+    public File getRooPath() {
+        return rooPath;
+    }
+
+
 
     /**
      * @return the module

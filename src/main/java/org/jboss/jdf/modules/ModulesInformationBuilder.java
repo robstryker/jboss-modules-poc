@@ -86,7 +86,7 @@ public class ModulesInformationBuilder {
             JAXBContext context = JAXBContext.newInstance(ModulesElement.class, Module.class, ModuleAlias.class);
             Marshaller marshaller = context.createMarshaller();
             StringWriter sw = new StringWriter();
-            ModulesElement me = new ModulesElement();
+            ModulesElement me = new ModulesElement(rootPath);
 
             me.getModules().addAll(build());
             marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
