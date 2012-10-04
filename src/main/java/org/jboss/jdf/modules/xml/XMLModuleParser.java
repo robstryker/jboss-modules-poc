@@ -38,7 +38,7 @@ import org.jboss.jdf.modules.model.ModuleAlias;
 import org.jboss.jdf.modules.model.ModuleDependency;
 import org.jboss.jdf.modules.model.Services;
 import org.jboss.jdf.modules.model.SystemDependency;
-import org.jboss.logging.Logger;
+//import org.jboss.logging.Logger;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -50,7 +50,7 @@ import org.xml.sax.SAXException;
  */
 public class XMLModuleParser {
 
-    private static final Logger log = Logger.getLogger(XMLModuleParser.class.getName());
+//    private static final Logger log = Logger.getLogger(XMLModuleParser.class.getName());
 
     private DocumentBuilder documentBuilder;
 
@@ -76,7 +76,7 @@ public class XMLModuleParser {
      */
     public BaseModule parse(File xml) throws SAXException, IOException {
         Document document = documentBuilder.parse(xml);
-        log.tracef("XML %s parsed. Populating info", xml);
+//        log.tracef("XML %s parsed. Populating info", xml);
         if (document.getDocumentElement().getNodeName().equals("module")) {
             return createModule(xml, document);
         } else if (document.getDocumentElement().getNodeName().equals("module-alias")) {
@@ -100,7 +100,7 @@ public class XMLModuleParser {
         String targetSlot = document.getDocumentElement().getAttribute("target-slot");
         BaseModule target = new BaseModule(rootPath, targetName, targetSlot, null);
         ModuleAlias moduleAlias = new ModuleAlias(rootPath, name, slot, sourceXML, target);
-        log.tracef("%s populated", moduleAlias);
+//        log.tracef("%s populated", moduleAlias);
         return moduleAlias;
     }
 
@@ -123,7 +123,7 @@ public class XMLModuleParser {
         fillModuleProperties(document, module);
         fillModuleResources(sourceXML.getParentFile(), document, module);
         fillModuleDependencies(document, module);
-        log.tracef("%s populated", module);
+//        log.tracef("%s populated", module);
         return module;
     }
 
