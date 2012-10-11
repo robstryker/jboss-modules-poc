@@ -60,6 +60,12 @@ public class XMLModuleParser {
         try {
             this.rootPath = rootPath;
             DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
+            documentBuilderFactory.setNamespaceAware(false);
+            documentBuilderFactory.setValidating(false);
+            documentBuilderFactory.setFeature("http://xml.org/sax/features/namespaces", false);
+            documentBuilderFactory.setFeature("http://xml.org/sax/features/validation", false);
+            documentBuilderFactory.setFeature("http://apache.org/xml/features/nonvalidating/load-dtd-grammar", false);
+            documentBuilderFactory.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false);
             documentBuilder = documentBuilderFactory.newDocumentBuilder();
         } catch (Exception e) {
             throw new RuntimeException("Can't construct XPathExtractor. Cause " + e.getMessage(), e);
